@@ -21,6 +21,15 @@ import BookCreateScreen from '../screens/book/CreateScreen';
 import BookShowScreen from '../screens/book/ShowScreen';
 import BookEditScreen from '../screens/book/EditScreen';
 
+import AccountInfo from '../screens/user/AccountInfo';
+import AddRequest from '../screens/user/AddRequest';
+import MyAccident from '../screens/user/MyAccident';
+
+import AccidentDetail from '../screens/driver/AccidentDetail';
+import AllAccident from '../screens/driver/AllAccident';
+import Donar from '../screens/driver/Donar';
+import DonarDetail from '../screens/driver/DonarDetail';
+
 import AuthLoading from '../screens/auth/AuthLoading';
 
 import ResolveAuthScreen from './ResolveAuthScreen';
@@ -55,8 +64,18 @@ const switchNavigator = createSwitchNavigator(
       SignIn: SignInScreen,
       SignUp: SignUpScreen,
     }),
+    userFlow: createMaterialBottomTabNavigator({
+      MyAccident: MyAccident,
+      AccountInfo: AccountInfo,
+      AddRequest: AddRequest,
+    }),
+    driverFlow: createMaterialBottomTabNavigator({
+      AllAccident: AllAccident,
+      Donar: Donar,
+    }),
     mainFlow: createMaterialBottomTabNavigator(
       {
+        MyAccident: MyAccident,
         bookFlow: createStackNavigator({
           BookIndex: BookIndexScreen,
           BookShow: BookShowScreen,
