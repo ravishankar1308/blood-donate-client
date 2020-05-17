@@ -16,16 +16,16 @@ import {
   Title,
   TextInput,
 } from 'react-native-paper';
-import {Spacer, Spacer0, Spacer2} from '../../components/Spacer';
+import {Spacer, Spacer0, Spacer2, Spacer1} from '../../components/Spacer';
 import {Form} from '../../helper/react-native-autofocus';
 import {Text, Card} from 'react-native-elements';
 import ListItem from '../../components/ListItem';
 import {Context} from '../../context/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
+import jsonServer from '../../api/jsonServer1';
 
-const AddRequest = () => {
-
+const AddRequest = ({navigation}) => {
   const getLocation = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -37,8 +37,12 @@ const AddRequest = () => {
       );
       Geolocation.getCurrentPosition(
         async (position) => {
-          const currentLongitude = await JSON.stringify(position.coords.longitude);
-          const currentLatitude = await JSON.stringify(position.coords.latitude);
+          const currentLongitude = await JSON.stringify(
+            position.coords.longitude,
+          );
+          const currentLatitude = await JSON.stringify(
+            position.coords.latitude,
+          );
           await setLatitude(currentLatitude);
           await setLongitude(currentLongitude);
         },
@@ -46,7 +50,7 @@ const AddRequest = () => {
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('raviset');
+        console.log('raviset');
       } else {
         alert('Permission Denied');
       }
@@ -67,40 +71,66 @@ const AddRequest = () => {
   };
 
   const sendRequest = async () => {
-      await getLocation();
-      await getId();
+    try {
+      if (description === '') {
+        setError('Accident detail required');
+        setVisibel(true);
+      } else if (description.length < 20) {
+        setError('Detail too short');
+        setVisibel(true);
+      } else {
+        await getLocation();
+        await getId();
+        await jsonServer.post('/api/accident', {
+          latitude,
+          longitude,
+          accidentUser: user,
+          description: description,
+        });
+        await setDescription('');
+        await setError('Request Added Succesfully');
+        await Alert.alert(
+          'Succesfully',
+          'Your Request added succesfully. We will contact you shortly',
+          [{text: 'OK', onPress: () => navigation.navigate('MyAccident')}],
+          {cancelable: false},
+        );
+        // await navigation.navigate('MyAccident');
+      }
+    } catch (e) {
+      await console.log(e.response.data);
+    }
+  };
 
-  }
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [user, setUser] = useState('');
+  const [description, setDescription] = useState('');
 
-const [latitude,setLatitude] =useState('');
-const [longitude,setLongitude] = useState('');
-const [user,setUser] = useState('');
-const [description,setDescription] = useState('');
-
+  const [visibel, setVisibel] = useState(false);
+  const [error, setError] = useState('');
 
   return (
     <View style={styles.container}>
-        <Text>
-            {longitude}
-        </Text><Text>
-            {latitude}
-        </Text><Text>
-            {user}
-        </Text>
       <View>
-        <Spacer0 />
+        <Spacer1 />
         <Title>Add Request</Title>
         <Spacer0 />
       </View>
       <View style={{width: '90%'}}>
-        <TextInput label="Detail" numberOfLines={6} multiline={true} />
+        <TextInput
+          label="Accident Detail"
+          numberOfLines={10}
+          multiline={true}
+          placeholder="Describe the Accident"
+          autoFocus={true}
+          onChangeText={(text) => setDescription(text)}
+          value={description}
+          autoCapitalize="none"
+          autoCorrect={false}
+          mode="outlined"
+        />
         <Spacer0 />
-        <Button
-          style={{width: '80%', alignSelf: 'center'}}
-          onPress={AddRequest}
-          mode="contained">
-          Submit
-        </Button>
         <Button
           style={{width: '80%', alignSelf: 'center'}}
           onPress={sendRequest}
@@ -108,6 +138,17 @@ const [description,setDescription] = useState('');
           Submit
         </Button>
       </View>
+      <Snackbar
+        visible={visibel}
+        onDismiss={() => setVisibel(false)}
+        action={{
+          // label: 'Undo',
+          onPress: () => {
+            // Do something
+          },
+        }}>
+        {error}
+      </Snackbar>
     </View>
   );
 };
@@ -120,4 +161,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
 export default AddRequest;
