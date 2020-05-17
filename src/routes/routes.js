@@ -5,7 +5,13 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 // import {createAppContainer} from '@react-navigation/native';
 // import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import SignInScreen from '../screens/auth/SignInScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -33,6 +39,10 @@ import DonarDetail from '../screens/driver/DonarDetail';
 import AuthLoading from '../screens/auth/AuthLoading';
 
 import ResolveAuthScreen from './ResolveAuthScreen';
+import React from 'react';
+import {View, Text} from 'react-native';
+
+const iconSize = 24;
 
 const appNavigator = createStackNavigator(
   {
@@ -64,14 +74,89 @@ const switchNavigator = createSwitchNavigator(
       SignIn: SignInScreen,
       SignUp: SignUpScreen,
     }),
-    userFlow: createMaterialBottomTabNavigator({
-      MyAccident: MyAccident,
-      AccountInfo: AccountInfo,
-      AddRequest: AddRequest,
-    }),
+
+    userFlow: createMaterialBottomTabNavigator(
+      // createBottomTabNavigator
+      {
+        MyAccident: {
+          screen: MyAccident,
+          navigationOptions: {
+            tabBarLabel: 'Home',
+            tabBarIcon: ({tintColor}) => (
+              <Icon name="home" color={tintColor} size={24} />
+            ),
+          },
+        },
+        AddRequest: {
+          screen: AddRequest,
+          navigationOptions: {
+            tabBarLabel: 'Request',
+            tabBarIcon: ({tintColor}) => (
+              <Ionicons
+                name="md-add-circle-outline"
+                color={tintColor}
+                size={iconSize}
+              />
+            ),
+          },
+        },
+        AccountInfo: {
+          screen: AccountInfo,
+          navigationOptions: {
+            tabBarLabel: 'Account',
+            tabBarIcon: ({tintColor}) => (
+              <MaterialCommunityIcons
+                name="account"
+                color={tintColor}
+                size={iconSize}
+              />
+            ),
+          },
+        },
+      },
+      {
+        initialRouteName: 'MyAccident',
+        activeColor: '#f0edf6',
+        inactiveColor: '#9f8de2',
+        // barStyle: {backgroundColor: '#694fad'},
+      },
+    ),
     driverFlow: createMaterialBottomTabNavigator({
-      AllAccident: AllAccident,
-      Donar: Donar,
+      AllAccident: {
+        screen: AllAccident,
+        navigationOptions: {
+          tabBarLabel: 'Accident',
+          tabBarIcon: ({tintColor}) => (
+            <MaterialIcons
+              name="event-seat"
+              color={tintColor}
+              size={iconSize}
+            />
+          ),
+        },
+      },
+      Donar: {
+        screen: Donar,
+        navigationOptions: {
+          tabBarLabel: 'Donar',
+          tabBarIcon: ({tintColor}) => (
+            <FontAwesome5 name="users" color={tintColor} size={iconSize} />
+          ),
+        },
+      },
+      AccountInfo: {
+        screen: AccountInfo,
+        navigationOptions: {
+          tabBarLabel: 'Account',
+          tabBarIcon: ({tintColor}) => (
+            <MaterialCommunityIcons
+              name="account"
+              color={tintColor}
+              size={iconSize}
+            />
+          ),
+        },
+      },
     }),
     mainFlow: createMaterialBottomTabNavigator(
       {
@@ -83,12 +168,12 @@ const switchNavigator = createSwitchNavigator(
         BookCreate: BookCreateScreen,
         Account: AccountScreen,
       },
-      {
-        initialRouteName: 'bookFlow',
-        activeColor: '#f0edf6',
-        inactiveColor: '#3e2465',
-        barStyle: {backgroundColor: '#694fad'},
-      },
+      // {
+      //   initialRouteName: 'bookFlow',
+      //   activeColor: '#f0edf6',
+      //   inactiveColor: '#3e2465',
+      //   barStyle: {backgroundColor: '#694fad'},
+      // },
     ),
   },
   {

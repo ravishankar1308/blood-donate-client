@@ -13,6 +13,8 @@ const authReducer = (state, action) => {
       return {...state, errorMessage: action.payload};
     case 'signin':
       return {errorMessage: '', token: action.payload};
+    case 'get_user':
+      return {...state, user: action.payload};
     case 'clear_error_message':
       return {...state, errorMessage: ''};
     case 'signout':
@@ -49,6 +51,7 @@ const signup = (dispatch) => async (data) => {
     });
 
     await AsyncStorage.setItem('token', response.data.token);
+    await AsyncStorage.setItem('ID', response.data.user.id);
     await roleScreen(response.data.token);
     await dispatch({type: 'signin', payload: response.data.token});
   } catch (err) {
@@ -60,22 +63,6 @@ const signup = (dispatch) => async (data) => {
   }
 };
 
-const roleScreen = async (token) => {
-  const response = await jsonServer.post(
-    `${authURL}/resolve`,
-    {
-      token: token,
-    },
-    {headers: {Authorization: `Bearer ${token}`}},
-  );
-  await console.log({comming: response.data});
-  if (response.data === 'user') {
-    navigate('userFlow');
-  } else if (response.data === 'driver') {
-    navigate('driverFlow');
-  }
-};
-
 const signin = (dispatch) => {
   return async (data) => {
     try {
@@ -83,9 +70,10 @@ const signin = (dispatch) => {
         email: data.email,
         password: data.password,
       });
-      await dispatch({type: 'signin', payload: response.data.token});
-      await roleScreen(response.data.token);
       await AsyncStorage.setItem('token', response.data.token);
+      await AsyncStorage.setItem('ID', response.data.user.id);
+      await roleScreen(response.data.token);
+      await dispatch({type: 'signin', payload: response.data.token});
     } catch ({err, response}) {
       dispatch({
         type: 'add_error',
@@ -96,24 +84,30 @@ const signin = (dispatch) => {
   };
 };
 
-// const signin = (dispatch) => {
-//   return async ({username, password}) => {
-//     try {
-//       const response = await jsonServer.post('/api/auth/signin', {
-//         username,
-//         password,
-//       });
-//       await AsyncStorage.setItem('token', response.data.token);
-//       await dispatch({type: 'signin', payload: response.data.token});
-//       await navigate('mainFlow');
-//     } catch (err) {
-//       dispatch({
-//         type: 'add_error',
-//         payload: err.response.data.message,
-//       });
-//     }
-//   };
-// };
+const roleScreen = async (token) => {
+  const response = await jsonServer.post(
+    `${authURL}/resolve`,
+    {
+      token: token,
+    },
+    {headers: {Authorization: `Bearer ${token}`}},
+  );
+  await console.log({comming: response.data});
+  const id = response.data.id;
+  if (response.data.role === 'user') {
+    navigate('userFlow');
+  } else if (response.data.role === 'driver') {
+    navigate('driverFlow');
+  }
+  console.log(response.data.id);
+};
+
+const getUser = (dispatch) => {
+  return async (ID) => {
+    const response = await jsonServer.get(`/api/users/${ID}`);
+    dispatch({type: 'get_user', payload: response.data});
+  };
+};
 
 const errorMessage = (dispatch) => ({error}) => {
   dispatch({
@@ -130,6 +124,14 @@ const signout = (dispatch) => async () => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signout, signup, clearErrorMessage, tryLocalSignin, errorMessage},
+  {
+    signin,
+    signout,
+    signup,
+    clearErrorMessage,
+    tryLocalSignin,
+    errorMessage,
+    getUser,
+  },
   {token: null, errorMessage: ''},
 );
