@@ -10,8 +10,12 @@ instance.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('token');
     if (token) {
-      // config.cookies.token = token;
-      config.headers.token = token;
+        // config.cookies.token = token;
+        //   {
+        headers : Authorization: `Bearer ${token}`;
+
+        //   }},
+        // config.headers.token = token;
     }
     return config;
   },

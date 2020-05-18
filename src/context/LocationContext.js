@@ -24,83 +24,12 @@ const authReducer = (state, action) => {
     }
 };
 
-const tryLocalSignin = (dispatch) => async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-        dispatch({type: 'signin', payload: token});
-        roleScreen(token);
-    } else {
-        navigate('SignIn');
-    }
-};
 
 const clearErrorMessage = (dispatch) => () => {
     dispatch({type: 'clear_error_message'});
 };
 
-const signup = (dispatch) => async (data) => {
-    try {
-        const response = await jsonServer.post(`${authURL}/signup`, {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            role: data.role,
-            age: data.age,
-            bloodType: data.bloodType,
-            donate: data.donate,
-        });
 
-        await AsyncStorage.setItem('token', response.data.token);
-        await AsyncStorage.setItem('ID', response.data.user.id);
-        await roleScreen(response.data.token);
-        await dispatch({type: 'signin', payload: response.data.token});
-    } catch (err) {
-        await console.log(err.data.message);
-        await dispatch({
-            type: 'add_error',
-            payload: err.response.data.message,
-        });
-    }
-};
-
-const signin = (dispatch) => {
-    return async (data) => {
-        try {
-            const response = await jsonServer.post('/api/auth/signin', {
-                email: data.email,
-                password: data.password,
-            });
-            await AsyncStorage.setItem('token', response.data.token);
-            await AsyncStorage.setItem('ID', response.data.user.id);
-            await roleScreen(response.data.token);
-            await dispatch({type: 'signin', payload: response.data.token});
-        } catch ({err, response}) {
-            dispatch({
-                type: 'add_error',
-                // payload: err.response.data.message,
-                payload: response.data,
-            });
-        }
-    };
-};
-
-const roleScreen = async (token) => {
-    const response = await jsonServer.post(
-        `${authURL}/resolve`,
-        {
-            token: token,
-        },
-        {headers: {Authorization: `Bearer ${token}`}},
-    );
-    await console.log({comming: response.data});
-    const id = response.data.id;
-    if (response.data.role === 'user') {
-        navigate('userFlow');
-    } else if (response.data.role === 'driver') {
-        navigate('driverFlow');
-    }
-    console.log(response.data.id);
-};
 
 const getUser = (dispatch) => {
     return async (ID) => {

@@ -85,18 +85,21 @@ const map: () => React$Node = () => {
       <Text />
 
       <MapView
-        // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-        style={styles.map}
-        mapType="standard"
-        pitchEnabled={true}
-        showsUserLocation={true}
-        followsUserLocation={true}
-        zoomControlEnabled={true}
-        showsCompass={true}
-        showsBuildings={true}
-        // showsTraffic={true}
+          // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={{
+            height: 300,
+            width: 300,
+          }}
+          mapType="standard"
+          pitchEnabled={true}
+          showsUserLocation={true}
+          followsUserLocation={true}
+          zoomControlEnabled={true}
+          showsCompass={true}
+          showsBuildings={true}
+          // showsTraffic={true}
 
-        initialRegion={{
+          initialRegion={{
           latitude: location.latitude,
           longitude: location.longitude,
           latitudeDelta: 3.115,

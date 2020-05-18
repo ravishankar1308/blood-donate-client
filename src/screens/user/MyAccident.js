@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Alert,
   PermissionsAndroid,
+  FlatList,
 } from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import {
@@ -15,42 +16,44 @@ import {
   Snackbar,
   Title,
   TextInput,
-  Avatar, Card, Paragraph
+  Avatar,
+  Card,
+  Paragraph,
 } from 'react-native-paper';
 import {Spacer, Spacer0, Spacer2, Spacer1} from '../../components/Spacer';
 import {Form} from '../../helper/react-native-autofocus';
 import {Text} from 'react-native-elements';
 import ListItem from '../../components/ListItem';
-import {Context} from '../../context/AuthContext';
+import {Context} from '../../context/AccidentContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import jsonServer from '../../api/jsonServer1';
-
-
+import AccidentListItem from '../../components/AccidentListItem';
 
 const MyAccident = () => {
-  const token = AsyncStorage.getItem('token');
+  const {state, getAccident} = useContext(Context);
+
+  useEffect(() => {
+    console.log('rav1');
+    (async () => {
+      const value = await AsyncStorage.getItem('ID');
+      // await navigation.addListener('willFocus', () => {
+      getAccident('Pending', value);
+      // });
+      await console.log(value);
+    })();
+    console.log('ravi2');
+  }, []);
 
   return (
-      <View>
-        <Headline style={{alignSelf:'center',marginVertical:15}}>Accident List</Headline>
-    <View style={{marginBottom:10,marginHorizontal:'5%'}}>
-      <Card >
-
-        <Card.Content>
-          <Title>Card title</Title>
-          <Paragraph>Card content</Paragraph>
-        </Card.Content>
-        <View style={{height:200,width:'100%',backgroundColor:'yellow'}}>
-          <Text>dfd</Text>
-        </View>
-        {/*<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />*/}
-        <Card.Actions>
-          <Button>Pending</Button>
-        </Card.Actions>
-      </Card>
-    </View>
-      </View>
+      <>
+        <Headline style={{alignSelf: 'center', marginVertical: 15}}>
+          Accident List
+        </Headline>
+        <ScrollView>
+          <AccidentListItem data={state.accident}/>
+        </ScrollView>
+      </>
   );
 };
 
