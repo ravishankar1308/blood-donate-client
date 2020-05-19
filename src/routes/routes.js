@@ -57,25 +57,30 @@ const appNavigator = createStackNavigator(
     SignIn: SignInScreen,
     SignUp: SignUpScreen,
     Loading: AuthLoading,
-    Resolve: ResolveAuthScreen,
+      Resolve: ResolveAuthScreen,
   },
-  // {
-  //   initialRouteName: 'Resolve',
-  //   defaultNavigationOptions: {
-  //     title: 'Business Search',
-  //   },
-  // },
+    // {
+    //   initialRouteName: 'Resolve',
+    //   defaultNavigationOptions: {
+    //     title: 'Business Search',
+    //   },
+    // },
 );
 
-const switchNavigator = createSwitchNavigator(
-  {
-    ResolveAuth: ResolveAuthScreen,
-    loginFlow: createStackNavigator({
-      SignIn: SignInScreen,
-      SignUp: SignUpScreen,
-    }),
+const AccidentInfo = createStackNavigator({
+    AllAccident: {screen: AllAccident},
+    AccidentDetail: {screen: AccidentDetail},
+});
 
-    userFlow: createMaterialBottomTabNavigator(
+const switchNavigator = createSwitchNavigator(
+    {
+        ResolveAuth: ResolveAuthScreen,
+        loginFlow: createStackNavigator({
+            SignIn: SignInScreen,
+            SignUp: SignUpScreen,
+        }),
+
+        userFlow: createMaterialBottomTabNavigator(
       // createBottomTabNavigator
       {
         MyAccident: {
@@ -122,18 +127,23 @@ const switchNavigator = createSwitchNavigator(
       },
     ),
     driverFlow: createMaterialBottomTabNavigator({
-      AllAccident: {
-        screen: AllAccident,
-        navigationOptions: {
-          tabBarLabel: 'Accident',
-          tabBarIcon: ({tintColor}) => (
-            <MaterialIcons
-              name="event-seat"
-              color={tintColor}
-              size={iconSize}
-            />
-          ),
-        },
+        // AllAccident2: createStackNavigator({
+        //   AllAccident: {screen: AllAccident},
+        //   AccidentDetail: {screen: AccidentDetail},
+        // }),
+
+        AllAccident: {
+            screen: AccidentInfo,
+            navigationOptions: {
+                tabBarLabel: 'Accident',
+                tabBarIcon: ({tintColor}) => (
+                    <MaterialIcons
+                        name="event-seat"
+                        color={tintColor}
+                        size={iconSize}
+                    />
+                ),
+            },
       },
       Donar: {
         screen: Donar,

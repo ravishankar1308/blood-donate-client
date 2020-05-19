@@ -6,26 +6,18 @@ import AllAccidentList from '../../components/AllAccidentList';
 import {Context} from '../../context/AccidentContext';
 
 const AllAccident = ({navigation}) => {
-
     const {state, getAllAccident} = useContext(Context);
 
     useEffect(() => {
-        console.log('rav1');
-        getAllAccident();
-
-        // (async (id) => {
-        //   const value = await AsyncStorage.getItem('ID');
-        //   await setId(value);
-        //   await console.log({getdid: value});
-        //   await getAccident(status, value);
-        // })();
-
-        // const listiner = navigation.addListener('didFocus', async () => {
-        //   await console.log({isaaassds: id});
-        //   await getAccident(status, id);
-        // });
+        getAllAccident('Pending');
+        const listiner = navigation.addListener('willFocus', () => {
+            getAllAccident('Pending');
+        });
     }, []);
-    console.log(state);
+
+    const st = 'Success';
+    const get_filter = () => getAllAccident('Pending');
+
     return (
         <>
             <View
@@ -39,31 +31,21 @@ const AllAccident = ({navigation}) => {
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#4c4ce3'}}
                     mode="contained"
-                    // onPress={() => getAccident('Pending', id)}
+                    onPress={() => getAllAccident('Pending')}
                 >
-                    Pendingss
+                    Pending
                 </Button>
                 <Button
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#008d02'}}
                     mode="contained"
-                    // onPress={() => getAccident('Success', id)}
+                    onPress={() => getAllAccident('Success')}
                 >
                     Success
                 </Button>
             </View>
             <View>
-                <AllAccidentList data={state}/>
-                <Card style={{width: '90%', alignSelf: 'center', marginVertical: 5}}>
-                    <Card title="Card Title" subtitle="Card Subtitle"/>
-                    <Card.Content>
-                        <Title>Name</Title>
-                        <Paragraph>Email Address</Paragraph>
-                    </Card.Content>
-                    <Card.Actions>
-                        <Button>Status</Button>
-                    </Card.Actions>
-                </Card>
+                <AllAccidentList data={state} navigation={navigation}/>
             </View>
         </>
     );

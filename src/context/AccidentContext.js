@@ -36,9 +36,16 @@ const getAccident = (dispatch) => {
 };
 
 const getAllAccident = (dispatch) => {
-    return async (status, ID) => {
+    return async (status) => {
         const response = await jsonServer.get('api/accidents');
-        await dispatch({type: 'get_accident', payload: response.data});
+        if (status) {
+            const filter = await response.data.filter(
+                (data) => data.status == status,
+            );
+            await dispatch({type: 'get_accident', payload: filter});
+        } else {
+            await dispatch({type: 'get_accident', payload: response.data});
+        }
     };
 };
 
@@ -51,8 +58,8 @@ const addAccident = (dispatch) => {
             accidentUser: user,
             description: description,
         });
-    await dispatch({type: 'get_accident', payload: response.data});
-  };
+        await dispatch({type: 'get_accident', payload: response.data});
+    };
 };
 
 const errorMessage = (dispatch) => ({error}) => {
