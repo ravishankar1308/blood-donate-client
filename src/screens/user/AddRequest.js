@@ -132,7 +132,7 @@ const AddRequest = ({navigation}) => {
           numberOfLines={10}
           multiline={true}
           placeholder="Describe the Accident"
-          autoFocus={true}
+          // autoFocus={true}
           onChangeText={(text) => setDescription(text)}
           value={description}
           autoCapitalize="none"

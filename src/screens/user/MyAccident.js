@@ -34,81 +34,72 @@ import AccidentListItem from '../../components/AccidentListItem';
 const MyAccident = ({navigation}) => {
   const {state, getAccident} = useContext(Context);
 
-
   useEffect(() => {
-    console.log('rav1');
-    const listiner = navigation.addListener('didFocus', async () => {
-      await console.log({isaaassds: id});
-      await getAccident(status, iddd);
-    });
-    (async () => {
-      const value = await AsyncStorage.getItem('ID');
-      setId(value);
-      await console.log({getdid: value});
-      await getAccident(status, value);
+      console.log('rav1');
 
-
-    })();
-
+      (async (id) => {
+          const value = await AsyncStorage.getItem('ID');
+          await setId(value);
+          await console.log({getdid: value});
+          await getAccident(status, value);
+      })();
+      const listiner = navigation.addListener('didFocus', async () => {
+          await console.log({isaaassds: id});
+          await getAccident(status, id);
+      });
   }, []);
 
-  const iddd = '5ebeb7517a43ff3dc01c7864';
+    const iddd = '5ebeb7517a43ff3dc01c7864';
 
-  // console.log({outid:id});
+    // console.log({outid:id});
 
-  const [id, setId] = useState();
-  const [status, setStatus] = useState('Pending');
+    const [id, setId] = useState();
+    const [status, setStatus] = useState('Pending');
 
-  const getData = () => getAccident(status, id);
+    const getData = () => {
+        getAccident(status, id);
+        console.log(id);
+    };
 
-  return (
-      <>
-        <Text>id{id}</Text>
-        {/*<Text>state{JSON.stringify(state.accident)}</Text>*/}
-        <Headline
-            style={{
-              alignSelf: 'center',
-              marginVertical: 10,
-              fontWeight: 'bold',
-              color: '#814be3',
-            }}>
-          Accident List
-        </Headline>
-        <View
-            style={{
-              flexDirection: 'row',
-              width: '90%',
-              alignSelf: 'center',
-              marginBottom: 15,
-            }}>
-          <Button
-              style={{flex: 1}}
-              contentStyle={{backgroundColor: '#4c4ce3', boarderRadius: 0}}
-              mode="contained"
-              onPress={() => {
-                setStatus('Pending');
-                getData();
-              }}>
-            {' '}
-            Pendind
-          </Button>
-          <Button
-              style={{flex: 1}}
-              contentStyle={{backgroundColor: '#008d02', boarderRadius: 0}}
-              mode="contained"
-              onPress={() => {
-                setStatus('Success');
-                getData();
-              }}>
-            {' '}
-            Success
-          </Button>
-        </View>
-        <ScrollView>
-          <AccidentListItem data={state.accident}/>
-        </ScrollView>
-      </>
-  );
+    return (
+        <>
+            <Headline
+                style={{
+                    alignSelf: 'center',
+                    marginVertical: 10,
+                    fontWeight: 'bold',
+                    color: '#814be3',
+                }}>
+                Accident List
+            </Headline>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    width: '90%',
+                    alignSelf: 'center',
+                    marginBottom: 15,
+                }}>
+                <Button
+                    style={{flex: 1}}
+                    contentStyle={{backgroundColor: '#4c4ce3'}}
+                    mode="contained"
+                    onPress={() => getAccident('Pending', id)}
+                >
+                    Pending
+                </Button>
+                <Button
+                    style={{flex: 1}}
+                    contentStyle={{backgroundColor: '#008d02'}}
+                    mode="contained"
+                    onPress={() => getAccident('Success', id)}>
+                    Success
+                </Button>
+            </View>
+            <ScrollView>
+                <AccidentListItem data={state.accident}/>
+            </ScrollView>
+        </>
+    );
 };
 
 export default MyAccident;

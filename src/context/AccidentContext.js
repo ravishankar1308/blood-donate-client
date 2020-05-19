@@ -27,23 +27,30 @@ const clearErrorMessage = (dispatch) => () => {
 };
 
 const getAccident = (dispatch) => {
-  return async (status, ID) => {
-    const response = await jsonServer.get(
-        `api/accident?status=${status}&accidentUser=${ID}`,
-    );
-    await dispatch({type: 'get_accident', payload: response.data});
-  };
+    return async (status, ID) => {
+        const response = await jsonServer.get(
+            `api/accident?status=${status}&accidentUser=${ID}`,
+        );
+        await dispatch({type: 'get_accident', payload: response.data});
+    };
+};
+
+const getAllAccident = (dispatch) => {
+    return async (status, ID) => {
+        const response = await jsonServer.get('api/accidents');
+        await dispatch({type: 'get_accident', payload: response.data});
+    };
 };
 
 const addAccident = (dispatch) => {
-  return async (latitude, longitude, user, description) => {
-    const response = await jsonServer.post('/api/accident', {
-      user: user,
-      latitude: latitude,
-      longitude: longitude,
-      accidentUser: user,
-      description: description,
-    });
+    return async (latitude, longitude, user, description) => {
+        const response = await jsonServer.post('/api/accident', {
+            user: user,
+            latitude: latitude,
+            longitude: longitude,
+            accidentUser: user,
+            description: description,
+        });
     await dispatch({type: 'get_accident', payload: response.data});
   };
 };
@@ -58,10 +65,11 @@ const errorMessage = (dispatch) => ({error}) => {
 export const {Provider, Context} = createDataContext(
     accidentReducer,
     {
-      addAccident,
-      getAccident,
-      clearErrorMessage,
-      errorMessage,
+        addAccident,
+        getAccident,
+        clearErrorMessage,
+        errorMessage,
+        getAllAccident,
     },
     {},
 );
