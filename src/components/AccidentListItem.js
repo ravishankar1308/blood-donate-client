@@ -8,7 +8,7 @@ import jsonServer from '../api/jsonServer1';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {Spacer} from './Spacer';
-import Moment from 'react-moment';
+import moment from 'moment';
 
 const AccidentListItem = ({data}) => {
     const getAccident = (dispatch) => {
@@ -26,7 +26,6 @@ const AccidentListItem = ({data}) => {
     // }, []);
 
     return (
-
         <View>
             <FlatList
                 data={data}
@@ -36,7 +35,7 @@ const AccidentListItem = ({data}) => {
                         <View style={{marginBottom: 20, marginHorizontal: '5%'}}>
                             <Card>
                                 <Card.Content>
-                                    <Title>{item.createdAt}</Title>
+                                    <Title>{moment(item.createdAt).format('MMM Do YY')}</Title>
                                     <Paragraph>{item.description}</Paragraph>
                                 </Card.Content>
 
@@ -44,8 +43,9 @@ const AccidentListItem = ({data}) => {
                                     style={{
                                         height: 200,
                                         width: '100%',
-                                        backgroundColor: 'yellow',
+                                        backgroundColor: 'white',
                                     }}>
+                                    {/*<Text>{JSON.stringify(item.location)}</Text>*/}
                                     <MapView
                                         // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                                         style={{height: '100%', width: '100%'}}
@@ -56,17 +56,17 @@ const AccidentListItem = ({data}) => {
                                         zoomControlEnabled={false}
                                         showsCompass={false}
                                         showsBuildings={false}
-                                        showsTraffic={true}
+                                        // showsTraffic={true}
                                         initialRegion={{
-                                            latitude: parseFloat(item.location.latitude),
-                                            longitude: parseFloat(item.location.longitude),
+                                            latitude: parseInt(item.location.latitude),
+                                            longitude: parseInt(item.location.longitude),
                                             latitudeDelta: 1,
                                             longitudeDelta: 1,
                                         }}>
                                         <MapView.Marker
                                             coordinate={{
-                                                latitude: parseFloat(item.location.latitude),
-                                                longitude: parseFloat(item.location.longitude),
+                                                latitude: parseInt(item.location.latitude),
+                                                longitude: parseInt(item.location.longitude),
                                             }}
                                             title="sdsadsa"
                                             description="asdsad"

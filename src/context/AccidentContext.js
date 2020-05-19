@@ -12,7 +12,7 @@ const accidentReducer = (state, action) => {
     case 'add_error':
       return {...state, errorMessage: action.payload};
     case 'get_accident':
-      return {...state, accident: action.payload};
+      return {...state.accident, accident: action.payload};
     case 'clear_error_message':
       return {...state, errorMessage: ''};
     case 'signout':
@@ -35,6 +35,19 @@ const getAccident = (dispatch) => {
   };
 };
 
+const addAccident = (dispatch) => {
+  return async (latitude, longitude, user, description) => {
+    const response = await jsonServer.post('/api/accident', {
+      user: user,
+      latitude: latitude,
+      longitude: longitude,
+      accidentUser: user,
+      description: description,
+    });
+    await dispatch({type: 'get_accident', payload: response.data});
+  };
+};
+
 const errorMessage = (dispatch) => ({error}) => {
   dispatch({
     type: 'add_error',
@@ -45,6 +58,7 @@ const errorMessage = (dispatch) => ({error}) => {
 export const {Provider, Context} = createDataContext(
     accidentReducer,
     {
+      addAccident,
       getAccident,
       clearErrorMessage,
       errorMessage,

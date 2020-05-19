@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Alert,
   PermissionsAndroid,
+  Loade,
 } from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import {
@@ -20,20 +21,23 @@ import {Spacer, Spacer0, Spacer2, Spacer1} from '../../components/Spacer';
 import {Form} from '../../helper/react-native-autofocus';
 import {Text, Card} from 'react-native-elements';
 import ListItem from '../../components/ListItem';
-import {Context} from '../../context/AuthContext';
+import {Context} from '../../context/AccidentContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import jsonServer from '../../api/jsonServer1';
 
 const AddRequest = ({navigation}) => {
+
+  const {state, addAccident} = useContext(Context);
+
   const getLocation = async () => {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Access Required',
-          message: 'This App needs to Access your location',
-        },
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Access Required',
+            message: 'This App needs to Access your location',
+          },
       );
       Geolocation.getCurrentPosition(
         async (position) => {
@@ -72,6 +76,7 @@ const AddRequest = ({navigation}) => {
 
   const sendRequest = async () => {
     try {
+      setLoader(true);
       if (description === '') {
         setError('Accident detail required');
         setVisibel(true);
@@ -87,6 +92,7 @@ const AddRequest = ({navigation}) => {
           accidentUser: user,
           description: description,
         });
+        // addAccident(latitude, longitude, user, description);
         await setDescription('');
         await setError('Request Added Succesfully');
         await Alert.alert(
@@ -97,7 +103,9 @@ const AddRequest = ({navigation}) => {
         );
         // await navigation.navigate('MyAccident');
       }
+      setLoader(false);
     } catch (e) {
+      setLoader(false);
       await console.log(e.response.data);
     }
   };
@@ -109,6 +117,7 @@ const AddRequest = ({navigation}) => {
 
   const [visibel, setVisibel] = useState(false);
   const [error, setError] = useState('');
+  const [loader, setLoader] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -131,12 +140,15 @@ const AddRequest = ({navigation}) => {
           mode="outlined"
         />
         <Spacer0 />
-        <Button
-          style={{width: '80%', alignSelf: 'center'}}
-          onPress={sendRequest}
-          mode="contained">
-          Submit
-        </Button>
+        {(!loader) ?
+            <Button
+                style={{width: '80%', alignSelf: 'center'}}
+                onPress={sendRequest}
+                mode="contained">
+              Submit
+            </Button>
+            : <ActivityIndicator animating={true}/>
+        }
       </View>
       <Snackbar
         visible={visibel}

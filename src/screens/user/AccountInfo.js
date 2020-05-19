@@ -11,22 +11,21 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const AccountInfo = ({navigation}) => {
   const {state, signin, clearErrorMessage, getUser, errorMessage} = useContext(
-    Context,
+      Context,
   );
-  //  navigation.addListener('willFocus', () => {
-  //    (async () => {
-  //      const value = await AsyncStorage.getItem('ID');
-  //      await navigation.addListener('willFocus', () => {
-  //        // getBlogPost();
-  //        getUser(value);
-  //      });
-  //      await console.log(value);
-  //    })();
-  //   // getBlogPost();
-  //
-  // });
+  navigation.addListener('didFocus', () => {
+    (async () => {
+      const value = await AsyncStorage.getItem('ID');
+      await navigation.addListener('willFocus', () => {
+        // getBlogPost();
+        console.log('asdsbdb');
+        // getUser(value);
+      });
+      await console.log(value);
+    })();
+    // getBlogPost();
+  });
   useEffect(() => {
-    console.log('rav1');
     (async () => {
       const value = await AsyncStorage.getItem('ID');
       // await navigation.addListener('willFocus', () => {
