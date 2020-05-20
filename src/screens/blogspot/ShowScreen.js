@@ -8,6 +8,7 @@ const ShowScreen = ({navigation}) => {
   const {getBooks, state} = useContext(Context);
 
   console.log(navigation.getParam('_id'));
+
   const blogPost = state.find(
     (state) => state._id === navigation.getParam('_id'),
   );

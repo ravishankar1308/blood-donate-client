@@ -36,6 +36,10 @@ import AllAccident from '../screens/driver/AllAccident';
 import Donar from '../screens/driver/Donar';
 import DonarDetail from '../screens/driver/DonarDetail';
 
+import AllUser from '../screens/admin/AllUser';
+import Driverlist from '../screens/admin/Driverlist';
+import UserDetail from '../screens/admin/UserDetail';
+
 import AuthLoading from '../screens/auth/AuthLoading';
 
 import ResolveAuthScreen from './ResolveAuthScreen';
@@ -47,16 +51,16 @@ const iconSize = 24;
 const appNavigator = createStackNavigator(
   {
     Index: IndexScreen,
-    Show: ShowScreen,
-    Create: CreateScreen,
-    Edit: EditScreen,
-    BookIndex: BookIndexScreen,
-    BookShow: BookShowScreen,
-    BookCreate: BookCreateScreen,
-    BookEdit: BookEditScreen,
-    SignIn: SignInScreen,
-    SignUp: SignUpScreen,
-    Loading: AuthLoading,
+      Show: ShowScreen,
+      Create: CreateScreen,
+      Edit: EditScreen,
+      BookIndex: BookIndexScreen,
+      BookShow: BookShowScreen,
+      BookCreate: BookCreateScreen,
+      BookEdit: BookEditScreen,
+      SignIn: SignInScreen,
+      SignUp: SignUpScreen,
+      Loading: AuthLoading,
       Resolve: ResolveAuthScreen,
   },
     // {
@@ -81,16 +85,16 @@ const switchNavigator = createSwitchNavigator(
         }),
 
         userFlow: createMaterialBottomTabNavigator(
-      // createBottomTabNavigator
-      {
-        MyAccident: {
-          screen: MyAccident,
-          navigationOptions: {
-            tabBarLabel: 'Home',
-            tabBarIcon: ({tintColor}) => (
-              <Icon name="home" color={tintColor} size={24} />
-            ),
-          },
+            // createBottomTabNavigator
+            {
+                MyAccident: {
+                    screen: MyAccident,
+                    navigationOptions: {
+                        tabBarLabel: 'Home',
+                        tabBarIcon: ({tintColor}) => (
+                            <Icon name="home" color={tintColor} size={24}/>
+                        ),
+                    },
         },
         AddRequest: {
           screen: AddRequest,
@@ -127,11 +131,6 @@ const switchNavigator = createSwitchNavigator(
       },
     ),
     driverFlow: createMaterialBottomTabNavigator({
-        // AllAccident2: createStackNavigator({
-        //   AllAccident: {screen: AllAccident},
-        //   AccidentDetail: {screen: AccidentDetail},
-        // }),
-
         AllAccident: {
             screen: AccidentInfo,
             navigationOptions: {
@@ -144,40 +143,85 @@ const switchNavigator = createSwitchNavigator(
                     />
                 ),
             },
-      },
-      Donar: {
-        screen: Donar,
-        navigationOptions: {
-          tabBarLabel: 'Donar',
-          tabBarIcon: ({tintColor}) => (
-            <FontAwesome5 name="users" color={tintColor} size={iconSize} />
-          ),
         },
-      },
+        Donar: {
+            screen: Donar,
+            navigationOptions: {
+                tabBarLabel: 'Donar',
+                tabBarIcon: ({tintColor}) => (
+                    <FontAwesome5 name="users" color={tintColor} size={iconSize}/>
+                ),
+            },
+        },
       AccountInfo: {
         screen: AccountInfo,
         navigationOptions: {
           tabBarLabel: 'Account',
-          tabBarIcon: ({tintColor}) => (
-            <MaterialCommunityIcons
-              name="account"
-              color={tintColor}
-              size={iconSize}
-            />
-          ),
+            tabBarIcon: ({tintColor}) => (
+                <MaterialCommunityIcons
+                    name="account"
+                    color={tintColor}
+                    size={iconSize}
+                />
+            ),
         },
       },
     }),
-    mainFlow: createMaterialBottomTabNavigator(
-      {
-        MyAccident: MyAccident,
-        bookFlow: createStackNavigator({
-          BookIndex: BookIndexScreen,
-          BookShow: BookShowScreen,
-        }),
-        BookCreate: BookCreateScreen,
-        Account: AccountScreen,
-      },
+        adminFlow: createMaterialBottomTabNavigator(
+            {
+                AllUser: {
+                    screen: AllUser,
+                    navigationOptions: {
+                        tabBarLabel: 'User',
+                        tabBarIcon: ({tintColor}) => (
+                            <Icon name="users" color={tintColor} size={20}/>
+                        ),
+                    },
+                },
+                AddRequest: {
+                    screen: AddRequest,
+                    navigationOptions: {
+                        tabBarLabel: 'Request',
+                        tabBarIcon: ({tintColor}) => (
+                            <Ionicons
+                                name="md-add-circle-outline"
+                                color={tintColor}
+                                size={iconSize}
+                            />
+                        ),
+                    },
+                },
+                AccountInfo: {
+                    screen: AccountInfo,
+                    navigationOptions: {
+                        tabBarLabel: 'Account',
+                        tabBarIcon: ({tintColor}) => (
+                            <MaterialCommunityIcons
+                                name="account"
+                                color={tintColor}
+                                size={iconSize}
+                            />
+                        ),
+                    },
+                },
+            },
+            {
+                initialRouteName: 'AllUser',
+                activeColor: '#f0edf6',
+                inactiveColor: '#9f8de2',
+                // barStyle: {backgroundColor: '#694fad'},
+            },
+        ),
+        mainFlow: createMaterialBottomTabNavigator(
+            {
+                MyAccident: MyAccident,
+                bookFlow: createStackNavigator({
+                    BookIndex: BookIndexScreen,
+                    BookShow: BookShowScreen,
+                }),
+                BookCreate: BookCreateScreen,
+                Account: AccountScreen,
+            },
       // {
       //   initialRouteName: 'bookFlow',
       //   activeColor: '#f0edf6',

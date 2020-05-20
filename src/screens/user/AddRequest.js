@@ -27,9 +27,11 @@ import Geolocation from '@react-native-community/geolocation';
 import jsonServer from '../../api/jsonServer1';
 
 const AddRequest = ({navigation}) => {
-
   const {state, addAccident} = useContext(Context);
 
+  useEffect(() => {
+
+  }, []);
   const getLocation = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -59,7 +61,7 @@ const AddRequest = ({navigation}) => {
         alert('Permission Denied');
       }
     } catch (err) {
-      alert('err', err);
+      Alert.alert('err', err);
       console.warn(err);
     }
   };
@@ -105,8 +107,15 @@ const AddRequest = ({navigation}) => {
       }
       setLoader(false);
     } catch (e) {
-      setLoader(false);
+      await setLoader(false);
       await console.log(e.response.data);
+      await Alert.alert(
+          'Try Again',
+          e.response.data[
+              {text: 'OK', onPress: () => navigation.navigate('MyAccident')}
+              ],
+          {cancelable: false},
+      );
     }
   };
 
@@ -128,37 +137,38 @@ const AddRequest = ({navigation}) => {
       </View>
       <View style={{width: '90%'}}>
         <TextInput
-          label="Accident Detail"
-          numberOfLines={10}
-          multiline={true}
-          placeholder="Describe the Accident"
-          // autoFocus={true}
-          onChangeText={(text) => setDescription(text)}
-          value={description}
-          autoCapitalize="none"
-          autoCorrect={false}
-          mode="outlined"
+            label="Accident Detail"
+            numberOfLines={10}
+            multiline={true}
+            placeholder="Describe the Accident"
+            // autoFocus={true}
+            onChangeText={(text) => setDescription(text)}
+            value={description}
+            autoCapitalize="none"
+            autoCorrect={false}
+            mode="outlined"
         />
-        <Spacer0 />
-        {(!loader) ?
+        <Spacer0/>
+        {!loader ? (
             <Button
                 style={{width: '80%', alignSelf: 'center'}}
                 onPress={sendRequest}
                 mode="contained">
               Submit
             </Button>
-            : <ActivityIndicator animating={true}/>
-        }
+        ) : (
+            <ActivityIndicator animating={true}/>
+        )}
       </View>
       <Snackbar
-        visible={visibel}
-        onDismiss={() => setVisibel(false)}
-        action={{
-          // label: 'Undo',
-          onPress: () => {
-            // Do something
-          },
-        }}>
+          visible={visibel}
+          onDismiss={() => setVisibel(false)}
+          action={{
+            // label: 'Undo',
+            onPress: () => {
+              // Do something
+            },
+          }}>
         {error}
       </Snackbar>
     </View>

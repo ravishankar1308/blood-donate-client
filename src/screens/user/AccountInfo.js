@@ -25,6 +25,7 @@ const AccountInfo = ({navigation}) => {
     })();
     // getBlogPost();
   });
+
   useEffect(() => {
     (async () => {
       const value = await AsyncStorage.getItem('ID');

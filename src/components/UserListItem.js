@@ -4,7 +4,7 @@ import {FlatList, View, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import MapView from 'react-native-maps';
 
-const AllAccidentList = ({data, onPress, navigation}) => {
+const UserListItem = ({data, onPress, navigation}) => {
     return (
         <View>
             <FlatList
@@ -43,4 +43,4 @@ const AllAccidentList = ({data, onPress, navigation}) => {
     );
 };
 
-export default AllAccidentList;
+export default UserListItem;

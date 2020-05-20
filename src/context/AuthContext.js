@@ -15,6 +15,8 @@ const authReducer = (state, action) => {
       return {errorMessage: '', token: action.payload};
     case 'get_user':
       return {...state, user: action.payload};
+    case 'get_user_list':
+      return {...state, userList: action.payload};
     case 'clear_error_message':
       return {...state, errorMessage: ''};
     case 'signout':
@@ -92,14 +94,57 @@ const roleScreen = async (token) => {
     },
     {headers: {Authorization: `Bearer ${token}`}},
   );
-  await console.log({comming: response.data});
   const id = response.data.id;
   if (response.data.role === 'user') {
     navigate('userFlow');
   } else if (response.data.role === 'driver') {
     navigate('driverFlow');
+  } else if (response.data.role === 'admin') {
+    navigate('adminFlow');
   }
   console.log(response.data.id);
+};
+
+const getUserList = (dispatch) => {
+  return async (age, bloodType, verifyUser) => {
+    await console.log(bloodType);
+    const response = await jsonServer.get('/api/users');
+    await console.log({sss: bloodType});
+    await console.log({ssss: age});
+    await console.log({ssss: verifyUser});
+
+    if ((age, bloodType, verifyUser)) {
+      await console.log('rav5');
+      await console.log(bloodType);
+      await console.log(verifyUser);
+      // const bool =!verifyUser;
+      const filter = await response.data.filter(
+          (data) => data.bloodType === bloodType && data.verifyUser !== verifyUser,
+      );
+      await dispatch({type: 'get_user_list', payload: filter});
+    } else if ((bloodType, age)) {
+      await console.log('rav2');
+      await console.log(bloodType);
+      await console.log(age);
+      const filter = await response.data.filter(
+          (data) => data.bloodType === bloodType && data.age === age,
+      );
+      await dispatch({type: 'get_user_list', payload: filter});
+    } else if (bloodType) {
+      await console.log('rav1');
+      const filter = await response.data.filter(
+          (data) => data.bloodType === bloodType,
+      );
+      await dispatch({type: 'get_user_list', payload: filter});
+    } else if (age) {
+      await console.log('rav1');
+      const filter = await response.data.filter((data) => data.age === age);
+      await dispatch({type: 'get_user_list', payload: filter});
+    } else {
+      await console.log('rav3');
+      await dispatch({type: 'get_user_list', payload: response.data});
+    }
+  };
 };
 
 const getUser = (dispatch) => {
@@ -124,14 +169,15 @@ const signout = (dispatch) => async () => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {
-    signin,
-    signout,
-    signup,
-    clearErrorMessage,
-    tryLocalSignin,
-    errorMessage,
-    getUser,
-  },
+    {
+      signin,
+      signout,
+      signup,
+      getUserList,
+      clearErrorMessage,
+      tryLocalSignin,
+      errorMessage,
+      getUser,
+    },
   {token: null, errorMessage: ''},
 );

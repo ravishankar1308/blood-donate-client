@@ -12,7 +12,11 @@ const accidentReducer = (state, action) => {
     case 'add_error':
       return {...state, errorMessage: action.payload};
     case 'get_accident':
-      return {...state.accident, accident: action.payload};
+      return action.payload;
+      // case 'edit_accident':
+      //   return state.map((accident) => {
+      //     return accident.id === action.payload.id ? action.payload : accident;
+      //   });
     case 'clear_error_message':
       return {...state, errorMessage: ''};
     case 'signout':
@@ -26,40 +30,62 @@ const clearErrorMessage = (dispatch) => () => {
   dispatch({type: 'clear_error_message'});
 };
 
-const getAccident = (dispatch) => {
-    return async (status, ID) => {
-        const response = await jsonServer.get(
-            `api/accident?status=${status}&accidentUser=${ID}`,
-        );
-        await dispatch({type: 'get_accident', payload: response.data});
-    };
+const getAccidentByUser = (dispatch) => {
+  return async (ID, status) => {
+    const response = await jsonServer.get(`api/accident?&accidentUser=${ID}`);
+    if (status) {
+      const filter = await response.data.filter(
+          (data) => data.status == status,
+      );
+      await dispatch({type: 'get_accident', payload: filter});
+    } else {
+      await dispatch({type: 'get_accident', payload: response.data});
+    }
+  };
+};
+
+const getAccidentDetail = (dispatch) => {
+  return async (id) => {
+    const response = await jsonServer.get(`api/accident/${id}`);
+    await dispatch();
+  };
 };
 
 const getAllAccident = (dispatch) => {
-    return async (status) => {
-        const response = await jsonServer.get('api/accidents');
-        if (status) {
-            const filter = await response.data.filter(
-                (data) => data.status == status,
-            );
-            await dispatch({type: 'get_accident', payload: filter});
-        } else {
-            await dispatch({type: 'get_accident', payload: response.data});
-        }
-    };
+  return async (status) => {
+    const response = await jsonServer.get('api/accident');
+    if (status) {
+      const filter = await response.data.filter(
+          (data) => data.status == status,
+      );
+      await dispatch({type: 'get_accident', payload: filter});
+    } else {
+      await dispatch({type: 'get_accident', payload: response.data});
+    }
+  };
+};
+
+const editAccident = (dispatch) => {
+  return async (id, status) => {
+    await jsonServer.put(`api/accident/${id}`, {status});
+    // dispatch({
+    //   type: 'edit_blogpost',
+    //   payload: {id: id, status: status},
+    // });
+  };
 };
 
 const addAccident = (dispatch) => {
-    return async (latitude, longitude, user, description) => {
-        const response = await jsonServer.post('/api/accident', {
-            user: user,
-            latitude: latitude,
-            longitude: longitude,
-            accidentUser: user,
-            description: description,
-        });
-        await dispatch({type: 'get_accident', payload: response.data});
-    };
+  return async (latitude, longitude, user, description) => {
+    const response = await jsonServer.post('/api/accident', {
+      user: user,
+      latitude: latitude,
+      longitude: longitude,
+      accidentUser: user,
+      description: description,
+    });
+    await dispatch({type: 'get_accident', payload: response.data});
+  };
 };
 
 const errorMessage = (dispatch) => ({error}) => {
@@ -72,11 +98,12 @@ const errorMessage = (dispatch) => ({error}) => {
 export const {Provider, Context} = createDataContext(
     accidentReducer,
     {
-        addAccident,
-        getAccident,
-        clearErrorMessage,
-        errorMessage,
-        getAllAccident,
+      addAccident,
+      getAccidentByUser,
+      clearErrorMessage,
+      errorMessage,
+      getAllAccident,
+      editAccident,
     },
     {},
 );

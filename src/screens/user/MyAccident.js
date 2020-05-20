@@ -32,7 +32,7 @@ import jsonServer from '../../api/jsonServer1';
 import AccidentListItem from '../../components/AccidentListItem';
 
 const MyAccident = ({navigation}) => {
-  const {state, getAccident} = useContext(Context);
+  const {state, getAccidentByUser} = useContext(Context);
 
   useEffect(() => {
       console.log('rav1');
@@ -41,13 +41,13 @@ const MyAccident = ({navigation}) => {
           const value = await AsyncStorage.getItem('ID');
           await setId(value);
           await console.log({getdid: value});
-          await getAccident(status, value);
+          await getAccidentByUser(value, 'Pending');
       })();
-      const listiner = navigation.addListener('didFocus', async () => {
-          await console.log({isaaassds: id});
-          await getAccident(status, id);
-      });
   }, []);
+
+    const listiner = navigation.addListener('didFocus', async () => {
+        await getAccidentByUser(id, 'Pending');
+    });
 
     const iddd = '5ebeb7517a43ff3dc01c7864';
 
@@ -83,20 +83,21 @@ const MyAccident = ({navigation}) => {
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#4c4ce3'}}
                     mode="contained"
-                    onPress={() => getAccident('Pending', id)}
-                >
+                    onPress={() => getAccidentByUser(id, 'Pending')}>
                     Pending
                 </Button>
                 <Button
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#008d02'}}
                     mode="contained"
-                    onPress={() => getAccident('Success', id)}>
+                    onPress={() => getAccidentByUser(id, 'Success')}>
                     Success
                 </Button>
             </View>
             <ScrollView>
-                <AccidentListItem data={state.accident}/>
+                {/*<Text>df</Text>*/}
+                {/*<Text>{JSON.stringify(state)}</Text>*/}
+                <AccidentListItem data={state}/>
             </ScrollView>
         </>
     );

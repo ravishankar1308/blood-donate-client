@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button, Card, Paragraph, Text, Title} from 'react-native-paper';
-import {FlatList, View, TouchableOpacity} from 'react-native';
+import {Button, Card, Paragraph, Title} from 'react-native-paper';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import moment from 'moment';
-import MapView from 'react-native-maps';
 
-const AllAccidentList = ({data, onPress, navigation}) => {
+const DonarrList = ({data, onPress, navigation}) => {
     return (
         <View>
             <FlatList
@@ -43,4 +42,4 @@ const AllAccidentList = ({data, onPress, navigation}) => {
     );
 };
 
-export default AllAccidentList;
+export default DonarrList;

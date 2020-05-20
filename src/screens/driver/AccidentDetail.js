@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {Button, Card, Paragraph, Title, Snackbar} from 'react-native-paper';
 import moment from 'moment';
@@ -8,33 +8,35 @@ import jsonServer from '../../api/jsonServer1';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {Picker} from '@react-native-community/picker';
+import {Context} from '../../context/AccidentContext';
+import {acc} from 'react-native-reanimated';
 
 const AccidentDetail = ({navigation}) => {
-    console.log(navigation.getParam('id'));
+    const {state, getAllAccident, editAccident} = useContext(Context);
 
-    useEffect(() => {
-        jsonServer
-            .get(`api/accident/${navigation.getParam('id')}`)
-            .then(async (response) => {
-                await setStatus(response.data.status);
-                await setUser(response.data.accidentUser);
-                await setData(response.data);
+    const accident = state.find(
+        (state) => state.id === navigation.getParam('id'),
+    );
 
-            });
-        console.log(data);
-    }, []);
-
-    const changeStatus = async (data) => {
-        await jsonServer
-            .put(`api/accident/${navigation.getParam('id')}`, {status: data})
-            .then(async (response) => {
-                await setVisible(true);
-                await setStatus(change);
-                await setChange(status);
-            });
+    const changeStatus1 = () => {
+        editAccident(navigation.getParam('id'), 'Success');
     };
 
-    const [data, setData] = useState('');
+    useEffect(() => {
+        // console.log(data);
+    }, []);
+
+    // const changeStatus = async (data) => {
+    //   await jsonServer
+    //     .put(`api/accident/${navigation.getParam('id')}`, {status: data})
+    //     .then(async (response) => {
+    //       await setVisible(true);
+    //       await setStatus(change);
+    //       await setChange(status);
+    //     });
+    // };
+
+    // const [data, setData] = useState('');
     const [user, setUser] = useState('');
     const [status, setStatus] = useState('');
 
@@ -45,10 +47,10 @@ const AccidentDetail = ({navigation}) => {
         <View style={{marginHorizontal: 15, marginTop: 15}}>
             <Card>
                 <Card.Content>
-                    <Title>Name : {user.name}</Title>
-                    <Text>Email Address: {user.email}</Text>
-                    <Text>{moment(data.createdAt).format('Do MMM YYYY')}</Text>
-                    <Paragraph>{data.description}</Paragraph>
+                    <Title>Name : {accident.accidentUser.name}</Title>
+                    <Text>Email Address: {accident.accidentUser.email}</Text>
+                    <Text>{moment(accident.createdAt).format('Do MMM YYYY')}</Text>
+                    <Paragraph>{accident.description}</Paragraph>
                 </Card.Content>
 
                 <View
@@ -57,7 +59,7 @@ const AccidentDetail = ({navigation}) => {
                         width: '100%',
                         backgroundColor: 'white',
                     }}>
-                    {data.location && (
+                    {accident.location && (
                         <Card.Content>
                             <MapView
                                 // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -71,15 +73,15 @@ const AccidentDetail = ({navigation}) => {
                                 showsBuildings={false}
                                 // showsTraffic={true}
                                 initialRegion={{
-                                    latitude: parseInt(data.location.latitude),
-                                    longitude: parseInt(data.location.longitude),
+                                    latitude: parseFloat(accident.location.latitude),
+                                    longitude: parseFloat(accident.location.longitude),
                                     latitudeDelta: 1,
                                     longitudeDelta: 1,
                                 }}>
                                 <MapView.Marker
                                     coordinate={{
-                                        latitude: parseInt(data.location.latitude),
-                                        longitude: parseInt(data.location.longitude),
+                                        latitude: parseFloat(accident.location.latitude),
+                                        longitude: parseFloat(accident.location.longitude),
                                     }}
                                     title="sdsadsa"
                                     description="asdsad"
@@ -98,11 +100,16 @@ const AccidentDetail = ({navigation}) => {
                             backgroundColor: '#ffffff10',
                             marginVertical: 20,
                         }}>
+                        {/*    const changeStatus1= () => {*/}
+                        {/*    editAccident('5ec37cf8abafdd2eb855441d','Pending')*/}
+                        {/*}*/}
                         <Picker
-                            selectedValue={status}
+                            selectedValue={accident.status}
                             style={{height: 50, width: '100%', margin: 2, color: '#00000090'}}
-                            onValueChange={(data) => {
-                                changeStatus(data);
+                            onValueChange={async (data) => {
+                                await editAccident(navigation.getParam('id'), data);
+                                await getAllAccident(data);
+                                await setVisible(true);
                             }}>
                             <Picker.Item label="Pending" value="Pending"/>
                             <Picker.Item label="Success" value="Success"/>
@@ -111,26 +118,26 @@ const AccidentDetail = ({navigation}) => {
                 </Card.Content>
                 <Card.Content>
                     <View style={{flexDirection: 'row'}}>
-
                         <View style={{flexDirection: 'row', flex: 5}}>
                             <View style={{marginTop: 5}}>
                                 <Entypo name="user" size={20} color="#0a00b6"/>
                             </View>
-                            <Title style={{marginLeft: 10}}>Age: {user.age}</Title>
+                            <Title style={{marginLeft: 10}}>
+                                Age: {accident.accidentUser.age}
+                            </Title>
                         </View>
                         <View style={{flexDirection: 'row', flex: 2}}>
                             <View style={{marginTop: 5}}>
                                 <Fontisto name="blood-drop" size={20} color="#ff1122"/>
                             </View>
-                            <Title style={{marginLeft: 10}}>{user.bloodType}</Title>
+                            <Title style={{marginLeft: 10}}>
+                                {accident.accidentUser.bloodType}
+                            </Title>
                         </View>
                     </View>
                 </Card.Content>
             </Card>
-            <Snackbar
-                visible={visible}
-                onDismiss={() => setVisible(false)}
-            >
+            <Snackbar visible={visible} onDismiss={() => setVisible(false)}>
                 Change Status Succesfully
             </Snackbar>
         </View>

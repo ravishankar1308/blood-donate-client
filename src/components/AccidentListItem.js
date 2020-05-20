@@ -11,14 +11,14 @@ import {Spacer} from './Spacer';
 import moment from 'moment';
 
 const AccidentListItem = ({data}) => {
-    const getAccident = (dispatch) => {
-        return async (status, ID) => {
-            const response = await jsonServer.get(
-                `api/accident?status=${status}&accidentUser=${ID}`,
-            );
-            await dispatch({type: 'get_accident', payload: response.data});
-        };
-    };
+    // const getAccident = (dispatch) => {
+    //   return async (status, ID) => {
+    //     const response = await jsonServer.get(
+    //       `api/accident?status=${status}&accidentUser=${ID}`,
+    //     );
+    //     await dispatch({type: 'get_accident', payload: response.data});
+    //   };
+    // };
 
     // useEffect(() => {
     //   const response = jsonServer.get(`/api/location?id=${item.location}`);
@@ -26,7 +26,7 @@ const AccidentListItem = ({data}) => {
     // }, []);
 
     return (
-        <View>
+        <ScrollView>
             <FlatList
                 data={data}
                 keyExtractor={(item) => item.id}
@@ -58,15 +58,15 @@ const AccidentListItem = ({data}) => {
                                         showsBuildings={false}
                                         // showsTraffic={true}
                                         initialRegion={{
-                                            latitude: parseInt(item.location.latitude),
-                                            longitude: parseInt(item.location.longitude),
+                                            latitude: parseFloat(item.location.latitude),
+                                            longitude: parseFloat(item.location.longitude),
                                             latitudeDelta: 1,
                                             longitudeDelta: 1,
                                         }}>
                                         <MapView.Marker
                                             coordinate={{
-                                                latitude: parseInt(item.location.latitude),
-                                                longitude: parseInt(item.location.longitude),
+                                                latitude: parseFloat(item.location.latitude),
+                                                longitude: parseFloat(item.location.longitude),
                                             }}
                                             title="sdsadsa"
                                             description="asdsad"
@@ -81,7 +81,7 @@ const AccidentListItem = ({data}) => {
                     );
                 }}
             />
-        </View>
+        </ScrollView>
     );
 };
 

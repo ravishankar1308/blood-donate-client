@@ -10,13 +10,11 @@ const AllAccident = ({navigation}) => {
 
     useEffect(() => {
         getAllAccident('Pending');
-        const listiner = navigation.addListener('willFocus', () => {
+        const listiner = navigation.addListener('didFocus', () => {
             getAllAccident('Pending');
         });
     }, []);
 
-    const st = 'Success';
-    const get_filter = () => getAllAccident('Pending');
 
     return (
         <>
@@ -31,16 +29,14 @@ const AllAccident = ({navigation}) => {
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#4c4ce3'}}
                     mode="contained"
-                    onPress={() => getAllAccident('Pending')}
-                >
+                    onPress={() => getAllAccident('Pending')}>
                     Pending
                 </Button>
                 <Button
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#008d02'}}
                     mode="contained"
-                    onPress={() => getAllAccident('Success')}
-                >
+                    onPress={() => getAllAccident('Success')}>
                     Success
                 </Button>
             </View>
