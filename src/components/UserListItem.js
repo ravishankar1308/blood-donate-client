@@ -4,18 +4,22 @@ import {FlatList, View, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import MapView from 'react-native-maps';
 
-const UserListItem = ({data, onPress, navigation}) => {
+const UserListItem = ({data, onPress, navigation, role}) => {
     return (
-        <View>
+        <>
             <FlatList
                 data={data}
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => {
                     return (
-                        <View>
+                        <>
                             <TouchableOpacity
-                                onPress={() =>
-                                    navigation.navigate('AccidentDetail', {id: item.id})
+                                onPress={() => {
+                                    role == 'driver'
+                                        ? navigation.navigate('DriverDetail', {id: item.id})
+                                        :
+                                        navigation.navigate('UserDetail', {id: item.id});
+                                }
                                 }>
                                 <Card
                                     style={{
@@ -25,21 +29,20 @@ const UserListItem = ({data, onPress, navigation}) => {
                                     }}>
                                     <Card title="Card Title" subtitle="Card Subtitle"/>
                                     <Card.Content>
-                                        <Title>{item.accidentUser.name}</Title>
+                                        <Title>{item.name}</Title>
                                         <Paragraph>
+                                            Register Date :
                                             {moment(item.createdAt).format('MMM Do YY')}
                                         </Paragraph>
+                                        <Paragraph>Email :{item.email}</Paragraph>
                                     </Card.Content>
-                                    <Card.Actions>
-                                        <Button>{item.status}</Button>
-                                    </Card.Actions>
                                 </Card>
                             </TouchableOpacity>
-                        </View>
+                        </>
                     );
                 }}
             />
-        </View>
+        </>
     );
 };
 
