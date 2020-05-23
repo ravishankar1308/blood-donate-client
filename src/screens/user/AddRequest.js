@@ -30,47 +30,51 @@ const AddRequest = ({navigation}) => {
   const {state, addAccident} = useContext(Context);
 
   useEffect(() => {
-
-  }, []);
-  const getLocation = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: 'Location Access Required',
-            message: 'This App needs to Access your location',
-          },
-      );
-      Geolocation.getCurrentPosition(
-        async (position) => {
-          const currentLongitude = await JSON.stringify(
-            position.coords.longitude,
-          );
-          const currentLatitude = await JSON.stringify(
-            position.coords.latitude,
-          );
-          await setLatitude(currentLatitude);
-          await setLongitude(currentLongitude);
-        },
-        (error) => alert(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('raviset');
-      } else {
-        alert('Permission Denied');
+    (async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Location Access Required',
+              message: 'This App needs to Access your location',
+            },
+        );
+        await Geolocation.getCurrentPosition(
+            async (position) => {
+              const currentLongitude = await JSON.stringify(
+                  position.coords.longitude,
+              );
+              const currentLatitude = await JSON.stringify(
+                  position.coords.latitude,
+              );
+              await setLatitude(currentLatitude);
+              await setLongitude(currentLongitude);
+            },
+            (error) => alert(error.message),
+            {
+              enableHighAccuracy: true,
+              timeout: 50000,
+              maximumAge: 1000,
+            },
+        );
+        await getId();
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          // console.log('raviset');
+        } else {
+          alert('Permission Denied');
+        }
+      } catch (err) {
+        Alert.alert('err', err);
+        console.warn(err);
       }
-    } catch (err) {
-      Alert.alert('err', err);
-      console.warn(err);
-    }
-  };
+    })();
+  }, []);
 
   const getId = async () => {
     try {
       const value = await AsyncStorage.getItem('ID');
-      setUser(value);
-      console.log(value);
+      await setUser(value);
+      await console.log(value);
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +82,7 @@ const AddRequest = ({navigation}) => {
 
   const sendRequest = async () => {
     try {
-      setLoader(true);
+      await setLoader(true);
       if (description === '') {
         setError('Accident detail required');
         setVisibel(true);
@@ -86,7 +90,7 @@ const AddRequest = ({navigation}) => {
         setError('Detail too short');
         setVisibel(true);
       } else {
-        await getLocation();
+        // await getLocation();
         await getId();
         await jsonServer.post('/api/accident', {
           latitude,
@@ -94,9 +98,10 @@ const AddRequest = ({navigation}) => {
           accidentUser: user,
           description: description,
         });
+        await console.log('3');
         // addAccident(latitude, longitude, user, description);
         await setDescription('');
-        await setError('Request Added Succesfully');
+        // await setError('Request Added Succesfully');
         await Alert.alert(
           'Succesfully',
           'Your Request added succesfully. We will contact you shortly',
@@ -105,7 +110,7 @@ const AddRequest = ({navigation}) => {
         );
         // await navigation.navigate('MyAccident');
       }
-      setLoader(false);
+      await setLoader(false);
     } catch (e) {
       await setLoader(false);
       await console.log(e.response.data);

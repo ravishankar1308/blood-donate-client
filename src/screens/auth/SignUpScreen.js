@@ -46,7 +46,7 @@ const SignUpScreen = ({navigation}) => {
     } else if (data.password === '') {
       errorMessage({error: 'Password Required'});
       setSnack(true);
-    } else if (data.age === null) {
+    } else if (data.age === '') {
       setSnack(true);
     } else if (data.bloodType === '') {
       errorMessage({error: 'Select Blood Type'});

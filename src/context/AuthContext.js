@@ -164,19 +164,24 @@ const getUserList = (dispatch) => {
 };
 
 const donarList = (dispatch) => {
-  return async (bloodGroup) => {
+  return async (bloodGroup, accidentUserID) => {
     await console.log('donarList');
     const response = await jsonServer.get('api/users');
 
     const filterData = await response.data.filter(
         (data) => data.donate === 'true' && data.verifyUser === 'true',
     );
+    const removeCurrentUser = await filterData.filter((item) => {
+      const condition = item.id;
+      return condition !== accidentUserID;
+    });
 
-    const validDonar = await filterData.filter((item) => {
+    const validDonar = await removeCurrentUser.filter((item) => {
       const condition = moment(item.donateDate).isBefore(
           moment(now()).subtract(6, 'month'),
       );
-      return condition === true;
+      const condition2 = item.donateDate;
+      return condition === true || condition2 === null;
     });
     await console.log({bloodGroup});
     const matchGroup = await validDonar.filter((item) => {
@@ -247,8 +252,6 @@ const getUser = (dispatch) => {
     dispatch({type: 'get_user', payload: response.data});
   };
 };
-
-
 
 const errorMessage = (dispatch) => ({error}) => {
   dispatch({

@@ -18,6 +18,7 @@ const AccidentDetail = ({navigation}) => {
         (state) => state.id === navigation.getParam('id'),
     );
 
+
     const changeStatus1 = () => {
         editAccident(navigation.getParam('accidentId'), 'Success');
     };
@@ -40,7 +41,10 @@ const AccidentDetail = ({navigation}) => {
                         <Card.Content>
                             <Title>Name : {accident.accidentUser.name}</Title>
                             <Text>Email Address: {accident.accidentUser.email}</Text>
-                            <Text>Accident Date: {moment(accident.createdAt).format('Do MMM YYYY')}</Text>
+                            <Text>
+                                Accident Date:{' '}
+                                {moment(accident.createdAt).format('Do MMM YYYY')}
+                            </Text>
                             <Paragraph>{accident.description}</Paragraph>
                         </Card.Content>
                     )}
@@ -95,22 +99,24 @@ const AccidentDetail = ({navigation}) => {
                             {/*    const changeStatus1= () => {*/}
                             {/*    editAccident('5ec37cf8abafdd2eb855441d','Pending')*/}
                             {/*}*/}
-                            <Picker
-                                selectedValue={accident.status}
-                                style={{
-                                    height: 50,
-                                    width: '100%',
-                                    margin: 2,
-                                    color: '#00000090',
-                                }}
-                                onValueChange={async (data) => {
-                                    await editAccident(navigation.getParam('id'), data);
-                                    await getAllAccident(data);
-                                    await setVisible(true);
-                                }}>
-                                <Picker.Item label="Pending" value="Pending"/>
-                                <Picker.Item label="Success" value="Success"/>
-                            </Picker>
+                            <Button>Staus : {accident.status}</Button>
+                            {/*<Picker*/}
+                            {/*  selectedValue={accident.status}*/}
+                            {/*  style={{*/}
+                            {/*    height: 50,*/}
+                            {/*    width: '100%',*/}
+                            {/*    margin: 2,*/}
+                            {/*    color: '#00000090',*/}
+                            {/*  }}*/}
+                            {/*  disable*/}
+                            {/*  onValueChange={async (data) => {*/}
+                            {/*    await editAccident(navigation.getParam('id'), data);*/}
+                            {/*    await getAllAccident(data);*/}
+                            {/*    // await setVisible(true);*/}
+                            {/*  }}>*/}
+                            {/*  <Picker.Item label="Pending" value="Pending" />*/}
+                            {/*  <Picker.Item label="Success" value="Success" />*/}
+                            {/*</Picker>*/}
                         </View>
                     </Card.Content>
                     {accident.accidentUser && (

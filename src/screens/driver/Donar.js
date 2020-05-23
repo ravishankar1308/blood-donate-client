@@ -10,7 +10,10 @@ const Donar = ({navigation}) => {
     const {state, donarList} = useContext(Context);
 
     useEffect(() => {
-        donarList(navigation.getParam('accidentUserBlood'));
+        donarList(
+            navigation.getParam('accidentUserBlood'),
+            navigation.getParam('accidentUser'),
+        );
     }, []);
     const accidentUser = navigation.getParam('accidentUser');
     const accidentUserBlood = navigation.getParam('accidentUserBlood');
@@ -27,7 +30,6 @@ const Donar = ({navigation}) => {
                 }}
             />
             <>
-                {/*{state.user && (*/}
                 {state.donarList == 0 ? (
                     <Text>Current No sutaible donar available</Text>
                 ) : (

@@ -15,7 +15,6 @@ import {Spacer0} from '../../components/Spacer';
 import {Context} from '../../context/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserListItem from '../../components/UserListItem';
-import ShowScreen from '../blogspot/ShowScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Driverlist = ({navigation}) => {
@@ -49,9 +48,12 @@ const Driverlist = ({navigation}) => {
             {/*  Driver List*/}
             {/*</Headline>*/}
             <ScrollView style={{marginTop: 10}}>
-
                 {/*<Text>{JSON.stringify(state.driverList)}</Text>*/}
-                <UserListItem data={state.driverList} navigation={navigation} role='driver'/>
+                <UserListItem
+                    data={state.driverList}
+                    navigation={navigation}
+                    role="driver"
+                />
             </ScrollView>
         </>
     );
@@ -60,7 +62,6 @@ const Driverlist = ({navigation}) => {
 Driverlist.navigationOptions = ({navigation}) => {
     return {
         headerTitle: 'Driver List',
-
 
         headerRight: () => (
             <TouchableOpacity

@@ -1,6 +1,5 @@
 import React, {Component, useContext} from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {Context} from '../../context/BlogContext';
 // import MapView from 'react-native-maps';
 
 // const CreateScreen = ({navigation}) => {

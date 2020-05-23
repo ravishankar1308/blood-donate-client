@@ -54,6 +54,7 @@ const SignInScreen = ({navigation}) => {
       errorMessage({error: 'Success'});
       setSnack(true);
       setLoader(false);
+      setSnack(false);
     }
 
     // signup(data);
@@ -133,22 +134,7 @@ const SignInScreen = ({navigation}) => {
     // </SafeAreaView>
   );
 };
-//   return (
-//     <View style={styles.login}>
-//       <Text>
-//       {JSON.stringify(state)}
-//       </Text>
-//       <NavigationEvents onWillBlur={clearErrorMessage} />
-//       <LoginFrom onSubmit={signin} state={state} />
-//       <Button onPress={() => console.log({token, state})} >
-//         token
-//     </Button>
-//       <Button onPress={() => navigation.navigate('SignUp')} >
-//         register
-//       </Button>
-//     </View>
-//   );
-// };
+
 
 const styles = StyleSheet.create({
   container: {

@@ -42,23 +42,23 @@ const MyAccident = ({navigation}) => {
           await setId(value);
           await console.log({getdid: value});
           await getAccidentByUser(value, 'Pending');
+
       })();
   }, []);
 
-    const listiner = navigation.addListener('didFocus', async () => {
+    const listiner = navigation.addListener('willFocus', async () => {
+        const id = await AsyncStorage.getItem('ID');
         await getAccidentByUser(id, 'Pending');
     });
 
-
-    // console.log({outid:id});
+    // const listiner = navigation.addListener('willFocus', async () => {
+    //   // const value = await AsyncStorage.getItem('ID');
+    //   // await setId(value);
+    //   await getAccidentByUser(id, 'Pending');
+    // });
 
     const [id, setId] = useState();
     const [status, setStatus] = useState('Pending');
-
-    const getData = () => {
-        getAccident(status, id);
-        console.log(id);
-    };
 
     return (
         <>

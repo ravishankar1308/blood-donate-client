@@ -2,8 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const instance = axios.create({
-    // baseURL: 'http://192.168.1.12:8085',
-    baseURL: 'http://67edec48.ngrok.io',
+    baseURL: 'http://192.168.1.12:8085',
+    // baseURL: 'http://67edec48.ngrok.io',
     // baseURL: 'https://git.heroku.com/accident-blood-donate.git',
 });
 
