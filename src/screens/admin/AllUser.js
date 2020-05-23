@@ -1,26 +1,23 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Card, Title, Paragraph, Button} from 'react-native-paper';
 import AllAccidentList from '../../components/AllAccidentList';
 import {Context} from '../../context/AuthContext';
+import UserListItem from '../../components/UserListItem';
 
 const AllUser = ({navigation}) => {
     const {state, getUserList} = useContext(Context);
+    const donate = 'true';
 
     useEffect(() => {
-        const verify = true;
-        const bloodType = 'B+';
-        const age = 25;
-        const verifyUser = false;
-        getUserList(age, bloodType, verifyUser);
-        console.log('effect');
-        // getAllAccident('Pending');
-        // const listiner = navigation.addListener('didFocus', () => {
-        //   getAllAccident('Pending');
-        // });
+        getUserList(donate, verify);
+        const listiner = navigation.addListener('didFocus', () => {
+            getUserList(donate, verify);
+        });
     }, []);
-    console.log(state.userList);
+
+    const [verify, setVerify] = useState('false');
 
     return (
         <>
@@ -31,28 +28,31 @@ const AllUser = ({navigation}) => {
                     alignSelf: 'center',
                     marginVertical: 15,
                 }}>
-                <Text>{JSON.stringify(state.userList)}</Text>
+
                 <Button
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#4c4ce3'}}
                     mode="contained"
-                    // onPress={() => getAllAccident('Pending')}
-                >
+                    onPress={() => {
+                        getUserList(donate, 'false');
+                    }}>
                     Pending
                 </Button>
                 <Button
                     style={{flex: 1}}
                     contentStyle={{backgroundColor: '#008d02'}}
                     mode="contained"
-                    // onPress={() => getAllAccident('Success')}
-                >
+                    onPress={() => {
+                        getUserList(donate, 'true');
+                    }}>
                     Approved
                 </Button>
             </View>
-            <View>
-                <Text>sd</Text>
-                {/*<AllAccidentList data={state} navigation={navigation} />*/}
-            </View>
+
+            <>
+                <UserListItem data={state.userList} navigation={navigation} role="user"/>
+                {/*<AllAccidentList data={state.userList} navigation={navigation} />*/}
+            </>
         </>
     );
 };

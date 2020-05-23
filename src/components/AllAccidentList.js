@@ -25,7 +25,9 @@ const AllAccidentList = ({data, onPress, navigation}) => {
                                     }}>
                                     <Card title="Card Title" subtitle="Card Subtitle"/>
                                     <Card.Content>
-                                        <Title>{item.accidentUser.name}</Title>
+                                        {item.accidentUser && (
+                                            <Title>{item.accidentUser.name}</Title>
+                                        )}
                                         <Paragraph>
                                             {moment(item.createdAt).format('MMM Do YY')}
                                         </Paragraph>

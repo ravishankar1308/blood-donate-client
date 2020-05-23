@@ -1,9 +1,21 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {View, Text, FlatList, ScrollView} from 'react-native';
 import {Button} from 'react-native-paper';
 import AllAccidentList from '../../components/AllAccidentList';
+import {Context} from '../../context/AuthContext';
+import moment, {now} from 'moment';
+import DonarList from '../../components/DonarList';
 
-const Donar = () => {
+const Donar = ({navigation}) => {
+    const {state, donarList} = useContext(Context);
+
+    useEffect(() => {
+        donarList(navigation.getParam('accidentUserBlood'));
+    }, []);
+    const accidentUser = navigation.getParam('accidentUser');
+    const accidentUserBlood = navigation.getParam('accidentUserBlood');
+    const accidentId = navigation.getParam('accidentId');
+
     return (
         <>
             <View
@@ -12,12 +24,22 @@ const Donar = () => {
                     width: '90%',
                     alignSelf: 'center',
                     marginVertical: 15,
-                }}>
-
-            </View>
-            <View>
-                {/*<AllAccidentList data={state} navigation={navigation} />*/}
-            </View>
+                }}
+            />
+            <>
+                {/*{state.user && (*/}
+                {state.donarList == 0 ? (
+                    <Text>Current No sutaible donar available</Text>
+                ) : (
+                    <ScrollView>
+                        <DonarList
+                            data={state.donarList}
+                            navigation={navigation}
+                            accident={accidentId}
+                        />
+                    </ScrollView>
+                )}
+            </>
         </>
     );
 };

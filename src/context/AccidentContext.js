@@ -32,7 +32,9 @@ const clearErrorMessage = (dispatch) => () => {
 
 const getAccidentByUser = (dispatch) => {
   return async (ID, status) => {
-    const response = await jsonServer.get(`api/accident?&accidentUser=${ID}`);
+    await console.log({ID});
+    const response = await jsonServer.get(`api/accidents?&accidentUser=${ID}`);
+
     if (status) {
       const filter = await response.data.filter(
           (data) => data.status == status,
@@ -67,11 +69,16 @@ const getAllAccident = (dispatch) => {
 
 const editAccident = (dispatch) => {
   return async (id, status) => {
-    await jsonServer.put(`api/accident/${id}`, {status});
-    // dispatch({
-    //   type: 'edit_blogpost',
-    //   payload: {id: id, status: status},
-    // });
+    // await jsonServer.put(`api/accident/${id}`, {status});
+    await jsonServer.put(`api/accident/${id}`, {status: status});
+  };
+};
+
+const editAccidentDonar = (dispatch) => {
+  return async (id, accidentUser) => {
+    await console.log({id});
+    await console.log({accidentUser});
+    await jsonServer.put(`api/accident/${id}`, {donarUser: accidentUser});
   };
 };
 
@@ -104,6 +111,7 @@ export const {Provider, Context} = createDataContext(
       errorMessage,
       getAllAccident,
       editAccident,
+      editAccidentDonar,
     },
     {},
 );

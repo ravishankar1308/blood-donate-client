@@ -15,7 +15,6 @@ const AllAccident = ({navigation}) => {
         });
     }, []);
 
-
     return (
         <>
             <View

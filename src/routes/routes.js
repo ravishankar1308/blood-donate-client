@@ -47,6 +47,7 @@ import AuthLoading from '../screens/auth/AuthLoading';
 import ResolveAuthScreen from './ResolveAuthScreen';
 import React from 'react';
 import {View, Text} from 'react-native';
+import DriverDetail from '../screens/admin/DriverDetail';
 
 const iconSize = 24;
 
@@ -76,6 +77,8 @@ const appNavigator = createStackNavigator(
 const AccidentInfo = createStackNavigator({
     AllAccident: {screen: AllAccident},
     AccidentDetail: {screen: AccidentDetail},
+    Donar: {screen: Donar},
+    DonarDetail: {screen: DonarDetail},
 });
 
 const userInfo = createStackNavigator({
@@ -84,7 +87,7 @@ const userInfo = createStackNavigator({
 });
 const driverInfo = createStackNavigator({
     DriverList: {screen: DriverList},
-    UserDetail: {screen: UserDetail},
+    DriverDetail: {screen: DriverDetail},
     AddDriver: {screen: AddDriver},
 });
 
@@ -117,16 +120,16 @@ const switchNavigator = createSwitchNavigator(
                                 name="md-add-circle-outline"
                                 color={tintColor}
                                 size={iconSize}
-              />
-            ),
-          },
-        },
-        AccountInfo: {
-          screen: AccountInfo,
-          navigationOptions: {
-            tabBarLabel: 'Account',
-            tabBarIcon: ({tintColor}) => (
-              <MaterialCommunityIcons
+                            />
+                        ),
+                    },
+                },
+                AccountInfo: {
+                    screen: AccountInfo,
+                    navigationOptions: {
+                        tabBarLabel: 'Account',
+                        tabBarIcon: ({tintColor}) => (
+                            <MaterialCommunityIcons
                 name="account"
                 color={tintColor}
                 size={iconSize}
@@ -148,7 +151,7 @@ const switchNavigator = createSwitchNavigator(
             navigationOptions: {
                 tabBarLabel: 'Accident',
                 tabBarIcon: ({tintColor}) => (
-                    <FontAwesome5
+                    <MaterialIcons
                         name="event-seat"
                         color={tintColor}
                         size={iconSize}
@@ -156,15 +159,15 @@ const switchNavigator = createSwitchNavigator(
                 ),
             },
         },
-        Donar: {
-            screen: Donar,
-            navigationOptions: {
-                tabBarLabel: 'Donar',
-                tabBarIcon: ({tintColor}) => (
-                    <FontAwesome5 name="users" color={tintColor} size={iconSize}/>
-                ),
-            },
-        },
+        // Donar: {
+        //   screen: Donar,
+        //   navigationOptions: {
+        //     tabBarLabel: 'Donar',
+        //     tabBarIcon: ({tintColor}) => (
+        //       <FontAwesome5 name="users" color={tintColor} size={iconSize} />
+        //     ),
+        //   },
+        // },
         AccountInfo: {
             screen: AccountInfo,
             navigationOptions: {
@@ -242,12 +245,12 @@ const switchNavigator = createSwitchNavigator(
             // },
         ),
     },
-  {
-    // initialRouteName: 'loginFlow',
-    defaultNavigationOptions: {
-      title: 'Login',
+    {
+        // initialRouteName: 'loginFlow',
+        defaultNavigationOptions: {
+            title: 'Login',
+        },
     },
-  },
 );
 
 const RouteNavigator = createAppContainer(switchNavigator);

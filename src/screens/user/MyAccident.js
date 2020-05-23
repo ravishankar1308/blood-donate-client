@@ -49,7 +49,6 @@ const MyAccident = ({navigation}) => {
         await getAccidentByUser(id, 'Pending');
     });
 
-    const iddd = '5ebeb7517a43ff3dc01c7864';
 
     // console.log({outid:id});
 
