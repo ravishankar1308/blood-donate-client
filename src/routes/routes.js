@@ -17,16 +17,6 @@ import SignInScreen from '../screens/auth/SignInScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import AccountScreen from '../screens/profile/AccountScreen';
 
-import IndexScreen from '../screens/blogspot/IndexScreen';
-import CreateScreen from '../screens/blogspot/CreateScreen';
-import ShowScreen from '../screens/blogspot/ShowScreen';
-import EditScreen from '../screens/blogspot/EditScreen';
-
-import BookIndexScreen from '../screens/book/IndexScreen';
-import BookCreateScreen from '../screens/book/CreateScreen';
-import BookShowScreen from '../screens/book/ShowScreen';
-import BookEditScreen from '../screens/book/EditScreen';
-
 import AccountInfo from '../screens/user/AccountInfo';
 import AddRequest from '../screens/user/AddRequest';
 import MyAccident from '../screens/user/MyAccident';
@@ -51,28 +41,6 @@ import DriverDetail from '../screens/admin/DriverDetail';
 
 const iconSize = 24;
 
-const appNavigator = createStackNavigator(
-    {
-        Index: IndexScreen,
-        Show: ShowScreen,
-        Create: CreateScreen,
-        Edit: EditScreen,
-        BookIndex: BookIndexScreen,
-        BookShow: BookShowScreen,
-        BookCreate: BookCreateScreen,
-        BookEdit: BookEditScreen,
-        SignIn: SignInScreen,
-        SignUp: SignUpScreen,
-        Loading: AuthLoading,
-        Resolve: ResolveAuthScreen,
-    },
-    // {
-    //   initialRouteName: 'Resolve',
-    //   defaultNavigationOptions: {
-    //     title: 'Business Search',
-    //   },
-    // },
-);
 
 const AccidentInfo = createStackNavigator({
     AllAccident: {screen: AllAccident},
@@ -226,23 +194,6 @@ const switchNavigator = createSwitchNavigator(
                 inactiveColor: '#9f8de2',
                 // barStyle: {backgroundColor: '#694fad'},
             },
-        ),
-        mainFlow: createMaterialBottomTabNavigator(
-            {
-                MyAccident: MyAccident,
-                bookFlow: createStackNavigator({
-                    BookIndex: BookIndexScreen,
-                    BookShow: BookShowScreen,
-                }),
-                BookCreate: BookCreateScreen,
-                Account: AccountScreen,
-            },
-            // {
-            //   initialRouteName: 'bookFlow',
-            //   activeColor: '#f0edf6',
-            //   inactiveColor: '#3e2465',
-            //   barStyle: {backgroundColor: '#694fad'},
-            // },
         ),
     },
     {
