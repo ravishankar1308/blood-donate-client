@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, FlatList, ScrollView} from 'react-native';
+import {View, FlatList, ScrollView, Share} from 'react-native';
 import {Button, Card, Headline, Paragraph, Title} from 'react-native-paper';
 import {Text} from 'react-native-elements';
 import jsonServer from '../api/jsonServer1';
@@ -11,20 +11,30 @@ import {Spacer} from './Spacer';
 import moment from 'moment';
 
 const AccidentListItem = ({data}) => {
-    // const getAccident = (dispatch) => {
-    //   return async (status, ID) => {
-    //     const response = await jsonServer.get(
-    //       `api/accident?status=${status}&accidentUser=${ID}`,
-    //     );
-    //     await dispatch({type: 'get_accident', payload: response.data});
-    //   };
-    // };
-
     // useEffect(() => {
     //   const response = jsonServer.get(`/api/location?id=${item.location}`);
     //   console.log(response);
     // }, []);
 
+    const onShare = async (item) => {
+        try {
+            const result = await Share.share({
+                title: 'Accident',
+                message: `${item.accidentUser.name} was accident in http://www.google.com/maps/place/${item.location.latitude},${item.location.longitude} I need ${item.accidentUser.bloodType} Blood`,
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
     return (
         <ScrollView>
             <FlatList
@@ -76,6 +86,12 @@ const AccidentListItem = ({data}) => {
                                 <Card.Actions>
                                     <Button>{item.status}</Button>
                                 </Card.Actions>
+                                <Button
+                                    mode="contained"
+                                    style={{width: '40%', alignSelf: 'center', marginBottom: 10}}
+                                    onPress={() => onShare(item)}>
+                                    Share{' '}
+                                </Button>
                             </Card>
                         </View>
                     );
